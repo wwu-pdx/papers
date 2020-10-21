@@ -118,15 +118,25 @@
 \section{Introduction}
 %% subsections are used to keep track of outlines and will be removed after..
 
-Advantages bestowed by cloud technologies, such as efficiency, agility, scalability and cost savings, are crucial for business success in today’s market. According to the 2020 Flexera State of the Cloud Report \cite{Flexera2020}, enterprises are running 48\% of their workloads and storing 45\% of their data in public clouds and planning to increase workload and data-related cloud utilization by 9\% and 8\% respectively over the next 12 months. 
+Due to the efficiency, agility, scalability, and potential cost savings that
+cloud computing offers, businesses are in the process of shifting their workloads
+to public cloud providers. According to a recent report~\cite{Flexera2020}, enterprises are running close to half of of their workloads and storing close to half of their data in public clouds with most planning to increase their usage of cloud infrastructure in the future.
+% Clouds allow organizations to reduce startup costs and maintenance tasks in infrastructure (hardware and network) layers through virtualization. However, integration, both between cloud services and legacy systems and between various services from different cloud resources and platforms, is quite complex \cite{Baron2019}. 
+% The findings in the same Flexera report \cite{Flexera2020} indicate that 93\% of enterprises are embracing multi-cloud solutions (involving multiple public and/or private clouds), among which 87\% are taking a hybrid approach. Services from different platforms that are not always compatible with each other can pose data interoperability and ownership issues. The rapid adoption of newer technologies such as containers and serverless frameworks also contributes to cloud complexity\cite{Sharrm}. As a result, other than cloud computing itself, IAM becomes more abstruse in the cloud compared to it in legacy IT environments. The requirements to understand and configure effective access for different applications, services and platforms exacerbate the problem. 
+Unfortunately, with cloud computing comes a level of complexity that is far beyond what
+typical organizations are accustomed to handling in legacy IT environments.
+Complicated fine-grained permissions and role-based access control applied to both legacy 
+virtual machines and networks as well as modern container-based and serverless platforms has 
+made the practice of security more abstruse~\cite{Sharrm}, raising significant
+security and privacy concerns \cite{Takabi2010}.
 
-Clouds allow organizations to reduce startup costs and maintenance tasks in infrastructure (hardware and network) layers through virtualization. However, integration, both between cloud services and legacy systems and between various services from different cloud resources and platforms, is quite complex \cite{Baron2019}. 
-The findings in the same Flexera report \cite{Flexera2020} indicate that 93\% of enterprises are embracing multi-cloud solutions (involving multiple public and/or private clouds), among which 87\% are taking a hybrid approach. Services from different platforms that are not always compatible with each other can pose data interoperability and ownership issues. The rapid adoption of newer technologies such as containers and serverless frameworks also contributes to cloud complexity\cite{Sharrm}. As a result, other than cloud computing itself, IAM becomes more abstruse in the cloud compared to it in legacy IT environments. The requirements to understand and configure effective access for different applications, services and platforms exacerbate the problem. 
-
-Complicated controls and rushed technology programs, along with the shared responsibilities in cloud architecture, raise various security and privacy concerns \cite{Takabi2010}. A study \cite{Ermetic2020} commissioned by Ermetic, IDC revealed that nearly 80\% of companies experienced at least one cloud data breach during 2019 and the first half of 2020. And that the top three cloud security threats are misconfiguration of production environments (67\%), lack of visibility into access in production environments (64\%) and improper IAM and permission configurations (61\%). According to IBM's Cost of Data Breach Report 2020 \cite{IBMSecurity2020}, misconfigurations were exploited in 19\% of malicious breaches with a cost of \$4.41 million . This number is 14\% higher than the average cost of data breach.
-
-A rash of data breaches are stemming from misconfigured or over-provisioned IAM when applying cloud services.
-In the cloud breach case of Capital One during July 2019, an attacker gained identity of the EC2 instance that has privileges to access sensitive information stored in AWS S3 \cite{Parimi2019}. 
+As a result, studies~\cite{Ermetic2020,IBMSecurity2020} have revealed that nearly 80\% of companies have experienced at least one cloud data breach with one of the top threats
+coming from improper Identity and Access Management (IAM) configurations (61\%).
+Data breaches stemming from misconfigured or over-provisioned IAM
+policies have contributed to numerous security incidents in the cloud.
+In the Capital One breach in July 2019, an attacker gained access to an EC2 instance with
+overprovisioned IAM privileges in order to access sensitive information stored in a multitude
+of AWS S3 storage buckets~\cite{Parimi2019}. 
 Another case was discovered from AutoClerk's unsecured Elastic search database hosted in AWS during September 2019. A surprising victim of this leak was the US government, military, and Department of Homeland Security (DHS). \cite{Fawkes2020}
 In a more recent case in August 2020, Two Twitter insiders abused their excessive internal privileges to collect information of high valued users for the government of Saudi Arabia \cite{Newman2019}.
 
