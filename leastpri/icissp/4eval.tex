@@ -1,0 +1,30 @@
+\noindent The first use of Least Privilege CTF occurred in our Fall 2020 offering of Portland State University's CS 430/530 Internet, Web, and Cloud Systems course with 60 students.  The first half of the 10-week course covers key concepts in networking, operating systems, web development, and databases before transitioning to their use in cloud computing environments. At the beginning of the 5th week, a lecture on Google Cloud Identity and Access Management is given to students and the Least Privilege CTF levels were assigned. Students were given a due date for the exercises at the end of the 5th week, allowing them about a week to finish the levels.
+
+To assess the effectiveness of the CTF, we surveyed students at the beginning of the 10th week. Below we list the questions that were asked in the survey in bullet points.  Our goal was to measure how well the CTF helped students learn about cloud security issues related to IAM and understand best practice.  
+
+Questions included in the survey:
+\begin{itemize}
+\item Q1: Rate the exercise for helping to understand least-privilege access control issues in the cloud.
+\item Q2: Rate the exercise for helping to develop skills for applying the principle of least-privilege access control in the cloud.
+\item Q3: Rate the scaffolding of levels in the exercise for helping to quickly learn about least-privilege access control in the cloud.
+\end{itemize}
+
+Of the 60 students in the class, 36 responded to the survey.  Table~\ref{table:data} shows the results. As the table shows, students felt that the lecture material and CTF exercises were both helpful for learning Cloud IAM and the principle of least privilege, while students found the scaffolded levels and instructions very helpful as a learning aid, validating our design.
+
+\begin{table}[h]
+ \vspace{-0.20cm}
+ \caption{Helpfulness ratings of Least Privilege CTF (1=Very Unhelpful, 2=Somewhat Unhelpful, 3=Neither Helpful nor Unhelpful, 4=Somewhat Helpful, 5=Very Helpful)}
+    \label{table:data} \centering
+    \begin{tabular}{|c|c|c|c|c|c|c|}
+    \hline
+    Question & 1 & 2 & 3 & 4 & 5 &Mean rating\\
+    \hline
+    \hline
+    Q1 & 1 & 3 & 3 & 19 & 10 & 3.94\\ %% $\pm$ \\
+    \hline
+    Q2 & 1 & 2 & 4 & 20 & 9 & 3.94\\ %% $\pm$ \\
+    \hline
+    Q3 & 1 & 0 & 1 & 10 & 24 & 4.56\\ %% $\pm$ \\
+    \hline
+    \end{tabular}
+\end{table}
