@@ -85,6 +85,7 @@
 \author{Wu-chang Feng}
 \affiliation{Department of Computer Science, Portland State University}
 
+
 %%
 %% By default, the full list of authors will be used in the page
 %% headers. Often, this list is too long, and will overlap
@@ -101,10 +102,11 @@
 \end{abstract}
 
 
+
 %%
 %% Keywords. The author(s) should pick words that accurately describe
 %% the work being presented. Separate the keywords with commas.
-\keywords{Cloud security, CTF, least privilege, IAM}
+\keywords{cloud security, CTF, least privilege, IAM}
 
 
 %%
@@ -114,6 +116,7 @@
 \pagestyle{plain}
 %\fancyfoot{}
 %\thispagestyle{empty}
+
 
 \section{Introduction}
 %% subsections are used to keep track of outlines and will be removed after..
@@ -142,7 +145,7 @@ In a more recent case in August 2020, Two Twitter insiders abused their excessiv
 
 Providers and users have to carefully balance between over privilege and under privileged access \cite{Sanders2018}. Properly managing identity access and following best practices are essential of mitigating the security risk. 
 In cloud computing, 
-%IAM can provide an adequate level of protection for all resources and data through rules and policies which are enforced on users via various techniques such as enforcing login password, assigning privileges to the users and provisioning user accounts \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
+
 IAM ensures authentication, which validating the identity of users or systems. For example, authentication between services involves in verifying the access request to the information which served by another service \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
 After authentication succeeds, authorization process will determine the privileges grant to legitimate users and enforce the security policies.
 
@@ -154,42 +157,36 @@ As mentioned earlier, cloud systems are now so complex that developers are reluc
 An interesting case study is that cloud service provider sometimes suggests using Owner role that granted with maximum permission in their documentation (Quickstart: Setup the Vision API) \cite{GoogleVis}. Based on the developer behavior we know, this could generate a potential attacking surface in the future.
 Developers need guidance or training for secure coding, however, nearly 70\% of developers expressed that they get little help in GitLab's 2019 Global Developer Report  \cite{Gitlab2019}.
 
-The principle of least privilege is essential to cloud security. There are many cloud CTF exercises available online covering a wide variety of vulnerabilities. Most of them are AWS (Amazon Web Services) based \cite{flaws} \cite{flaws2} \cite{cloudgoat} \cite{serverlessgoat}, only two of them contain  GCP (Google Cloud Platform) based exercises \cite{thunder-ctf} \cite{QWIKLABS}.  However, we find that none of them is destined for the purpose of   training developers on how to implement PoLP in cloud environment. To address this, we create Least Privilege CTF, a set of CTF exercises for helping practice and implement PoLP on Google Cloud Platform.
+The principle of least privilege is essential to cloud security. There are many cloud CTF exercises available online covering a wide variety of vulnerabilities. Most of them are AWS (Amazon Web Services) based \cite{flaws} \cite{flaws2} \cite{cloudgoat} \cite{serverlessgoat}, only two of them contain  GCP (Google Cloud Platform) based exercises \cite{thunder-ctf} \cite{QWIKLABS}.  However, we find that none of them is destined for the purpose of training developers on how to implement PoLP in cloud environment. To address this, we create Least Privilege CTF, a set of CTF exercises for helping practice and implement PoLP on Google Cloud Platform.
 
 Section 2 furnishes the definition of identity and access control in Google Cloud. Section 3 describes the comprehensive design of Least Privilege CTF and its levels. Section 4 exhibits the results of an initial deployment in an advanced elective course in our program. Lastly, Section 5 presents related work and section 6 concludes.
 
+
 \section{Google Cloud IAM}
 Identity and Access Management can provide an adequate level of protection for all resources and data through rules and policies which are enforced on users via various techniques such as enforcing login password, assigning privileges to the users and provisioning user accounts \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
-In Google Cloud,  Identity and Access Management lets you grant granular access to specific resources and helps prevent access to other resources \cite{Googlecloudiam}.
+Similarly, in Google Cloud, IAM grants granular access to specific resources and helps prevent access to other resources \cite{Googlecloudiam}.
 
-Identities relate to authenticated members. A member can be a Google Account for end users (userid@gmail.com), a service account for apps and virtual machines (12345678@cloudservices.
-gserviceaccount.com), a Google group (groupname@googlegroups.com), or a G Suite or cloud identity domain that can access a resource (alias@example.com). The identities of the first three member types are email addresses. The identity associated with G Suite or cloud identity domain is usually a domain name (Figure ~\ref{fig:mem}).
+Identities are essentially authenticated members. A member (Figure ~\ref{fig:mem}) can be a Google Account for end users (userid@gmail.com), a service account for apps and virtual machines (12345678@cloudservices.gserviceaccount.com), a Google group (groupname@google groups.com), or a G Suite or cloud identity domain that can access a resource (alias@example.com). The identities of the first three member types are email addresses. The identity associated with G Suite or cloud identity domain is usually a domain name.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{mem}
+  \includegraphics[width=\linewidth]{pic/mem}
   \caption {Types of Members in GCP}
   \label{fig:mem}
 \end{figure}
 
 
 
-Member,role and policy are three main parts of the authorization process.
-Instead of assigning permission directly to end user to access a resource, in Google Cloud, permissions are grouped into roles and roles are granted to authenticated members.  
-A role is a collection of permissions determining what operations are allowed on a resource (Figure ~\ref{fig:role}). Granting a role to a member actually grants all the permissions of that the role. 
+Authorization process that grants access of resources to members can be achieved through role and policy. A role is a collection of permissions determining what operations are allowed on a resource (Figure ~\ref{fig:role}). Instead of assigning permissions directly to end users, in Google Cloud, permissions are grouped into roles and then granted to authenticated members to access resources. Granting a role to a member actually grants all the permissions of that role.
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{role}
+  \includegraphics[width=\linewidth]{pic/role}
   \caption {GCP Predefined Role}
   \label{fig:role}
 \end{figure}
-A policy binds who (member) has what access (role) for which resource \cite{Googlecloudiam}. Some examples of resources are organizations, folders, projects, Compute Engine instances, and Cloud Storage buckets. Multiple members can be bind to one role \cite{Googlecloudiam}. 
-Primitive, predefined and custom roles are three types of roles supported in Google Cloud IAM \cite{googlecloudrole}. Primitive roles (renamed as Basic roles later) comprises Owner, Editor and Viewer roles, which exist prior to IAM in GCP. Predefined roles are finer-grained roles for a specific service . You can also limit privileges further by creating custom role and attach more specific permissions. This role based model of Google cloud IAM makes adopting the security Principle of Least Privilege straightforward.
+A policy binds who (member) has what access (role) for which resource \cite{Googlecloudiam}. Some examples of resources are organizations, folders, projects, Compute Engine instances, and Cloud Storage buckets. The binding between members and roles is a many-to-many relationship.
+Primitive, predefined and custom roles are three types of roles supported in Google Cloud IAM \cite{googlecloudrole}. Primitive roles (renamed as Basic roles later) comprises Owner, Editor and Viewer roles, which exist prior to IAM in GCP. For example, the account you used to create a project will be automatically attach with Owner role. Predefined roles are finer-grained roles for a particular service or resource. Privileges can also be limited further by creating custom role and attach permissions across services based on user selection. Unfortunately, not all permissions can be linked to Custom roles such as Datastore related permissions. 
 
-For example, if a couple of users need to view all files and file content in a public bucket in the project. you can add every one to a Google group and grant the Storage Admin role (roles/storage.
-admin) to the Google group. By looking through Table ~\ref{table:sto-role}, which displayed all predefined roles and their permissions associated with Cloud Storage, we notice that Storage Object Viewer would be sufficient to perform the same task. Therefore, binding Storage Object Viewer to the Google group would be a better option (Figure ~\ref{fig:sto-pre}). However, we know that the actual permissions needed are storage.objects.list (to list file) and storage.objects.get (to view file content). Following PoLP, we can create custom role and attach only those two permissions memtioned (Figure ~\ref{fig:sto-cus}).
-
-Custom roles provide user-specified list of permissions across services. Unfortunately, not all permissions can be linked to Custom roles such as Datastore related permissions.
-
+The role based model of cloud IAM simplifies the implementation of PoLP. To illustrate this, we can take the access control of Cloud Storage as an example. In Cloud Storage, everything that you store must be contained in a bucket. Buckets are the basic containers that hold objects such as files, images, etc. Suppose in a project, a set of users need access to view files and file content in a public bucket. For beginners, an easy solution is to create a Google group for the users and grant Storage Admin role (roles/storage.admin) to it. However, looking through Table ~\ref{table:sto-role}, which displays all predefined Cloud Storage roles and corresponding permissions, it is obvious that Storage Object Viewer role would be sufficient for users to perform the same task. Therefore, Storage Object Viewer role is a better option (Figure ~\ref{fig:sto-pre}), but still it is over-privileged. Following PoLP, we can optimize this by creating a custom role and attaching least privileges - storage.objects.list and storage.objects.get, which are actual permissions that allow a member to list files and view file content (Figure~\ref{fig:sto-cus}).
 
 \begin{table}[t]
     \begin{center}
@@ -218,14 +215,14 @@ Custom roles provide user-specified list of permissions across services. Unfortu
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{sto-pre}
+  \includegraphics[width=\linewidth]{pic/sto-pre}
   \caption {Policy - Predefined Role}
    \label{fig:sto-pre}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{sto-cus}
+  \includegraphics[width=\linewidth]{pic/sto-cus}
   \caption {Policy - Custom Role}
    \label{fig:sto-cus}
 \end{figure}
@@ -236,20 +233,20 @@ Custom roles provide user-specified list of permissions across services. Unfortu
 \section{Least Privilege CTF}
 
 \subsection{Design Goal}
-The purpose of Least Privilege CTF is to effectively teaching developers how to manage identity and access control and implement PoLP in Google Cloud project. Meanwhile, it should be able to run at minimum cost, deployed rapidly, extensible, friendly to beginners and delivered with instant feedback.
+The purpose of building Least Privilege CTF is to effectively teach developers about how IAM works and how to adopt PoLP in GCP. Meanwhile, the CTFs should be able to run at minimum cost and fast, deliver instant feedback, extensible and friendly to beginners.
 
 \begin{enumerate}
 \item Minimum cost: Anyone can apply for 300 credits(dollars) for free with a Google account and credit card. If levels are deleted upon completion, monthly cost would be less than a dollar (Figure ~\ref{fig:cost}). 
-\begin{figure}[h]
+\begin{figure}[!h]
   \centering
-  \includegraphics[width=\linewidth]{cost}
+  \includegraphics[width=\linewidth]{pic/cost}
   \caption {Billing - Monthly Cost}
   \label{fig:cost}
 \end{figure}
-\item Fast Deployment: Google Cloud Deployment Manager deploys all required resources specified with a declarative format using yaml at one time in parallel. This feature enables initial 11 levels in 4.5 minutes.
-\item Extensible: Easy to add new level with simple modification (Section 3.2.1).
-\item Beginners friendly: Explicit and detailed instruction attached with each level that makes advance Google Cloud knowledge optional(Section 3.2.2).
-\item Instant feedback: Results will be displayed immediately along with failing reason for each attempt (Section 3.2.2).
+\item Fast Deployment: Google Cloud Deployment Manager deploys all required resources specified with a declarative format using yaml at one time in parallel. This feature can enable initial 11 levels in 4.5 minutes.
+\item Extensible: Easy to add new level with simple modification. 
+\item Beginners friendly: Explicit and detailed instructions are available in the UI for every level. Prior Google Cloud knowledge is optional.
+\item Instant feedback: Results will be displayed immediately along with failing reason for each attempt.
 
 \end{enumerate}
 
@@ -261,33 +258,33 @@ Least privilege CTF is developed from Thunder CTF, a scaffolded, scenario-based 
 \subsubsection{UI and Cloud Functions}
 Despite it takes a page \cite{lst-ctf} hosted under main Thunder CTF website for steps of environment set-up and initial deployment, Least Privilege CTF does not generate level hints with HTML contents or render scripts in a similar way as Thunder CTF does. Instead, level instructions and hints of Least Privilege CTF are established with Cloud Functions \cite{cloudfunc}, a pay-as-you-go service that automatically scales based on loads, meaning you are only billed for execution time. Cloud Functions demand no server management which speeds up the development as we do not have to deal with the operational infrastructure in Google Cloud. The integration of logging and debugging capabilities makes the coding experience intuitive. More importantly, Cloud Functions service has built in security at role per function based on PoLP. 
 
-Least Privilge CTF selects HTTP functions \cite{httpfunc} that are invoked by standard HTTP requests and supports common methods like GET, PUT, POST, DELETE and OPTIONS to replace the hints system in Thunder CTF. A typical procedure in our design framework is that when a function is triggered by events, it waits for responses either returned from Cloud API or submitted in front-end using POST or GET method. The returned results are rendered into HTML through Jinja and reflect back to players. Thanks to the TLS certificates automatically provisioned in Cloud Functions service,  all HTTP functions can be invoked with a secure connection. 
+Least Privilge CTF selects HTTP functions \cite{httpfunc} that are invoked by standard HTTP requests and supports common methods like GET, PUT, POST, DELETE and OPTIONS to replace the hints system in Thunder CTF. In our design framework, a typical process starts when a function is triggered by events, and then waits for responses, either returned from Cloud API or submitted in front-end using POST or GET method. The returned results are rendered into HTML through Jinja and reflect back to players. Thanks to the TLS certificates automatically provisioned in Cloud Functions service,  all HTTP functions can be invoked with a secure connection. 
 
 In order to call a function and pass parameters, an URL known as HTTP-Triggered-Endpoint is obtained after each function deployment. Figure ~\ref{fig:endpoints} shows the function endpoints printed in Cloud Console shell when deployment manager completes the operation and creates initial levels.
 Two python run time functions are written in each level, an access function (example Figure ~\ref{fig:access}) for listing step by step level instructions and resources, and a check function (example Figure ~\ref{fig:check}) for validating the correctness of the role attached to access function.Figure  ~\ref{fig:score} presents the Scoreboard Function that keeps track of the overall accomplishment.  
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{access}
+  \includegraphics[width=0.5\textwidth]{pic/access}
   \caption {Access Function}
   \label{fig:access}
 \end{figure}
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.5\textwidth]{check}
+  \includegraphics[width=0.5\textwidth]{pic/check}
   \caption {Check Function}
   \label{fig:check}
 \end{figure}
 
 \begin{figure}[h]
   \centering
-  \includegraphics[width=0.4\textwidth]{score}
+  \includegraphics[width=0.4\textwidth]{pic/score}
   \caption {Scoreboard Function}
   \label{fig:score}
 \end{figure}
 
 \begin{figure*}[h]
   \centering
-  \includegraphics[width=0.7\textwidth]{endpoints}
+  \includegraphics[width=0.7\textwidth]{pic/endpoints}
   \caption {Endpoints}
    \label{fig:endpoints}
 \end{figure*}
@@ -299,10 +296,11 @@ Two python run time functions are written in each level, an access function (exa
 %%\caption{Figure 1: function-validate answer and provide hints}
 %%\label{fig:hints}
 %%\end{figure*}
-\subsubsection{Levels and examples}
+\subsubsection{Levels}
 Each Cloud function is expected to access level resources with its default service account. Service account of Check function only has privilege to list or get IAM permissions through API calls. All levels begin with a role attached to service account in Access Function,  containing excessive permissions,  to perform specific action. The winner condition is to modify the role with minimum permissions that performs the same action. 
 Primitive roles, which include the Owner, Editor, and Viewer roles that existed prior to the introduction of IAM.
 First level is designed for primitive role to list all resources in a project. Five levels are designed around predefined roles with different resources including cloud storage, vm instance, logging, datastore and cloud vision. Five levels are designed with custom role with corresponding resources, except that the datatore permissions are not supported in custom role.
+
 \section{Evaluation}
  
 The first use of Least Privilege CTF occurred in our Fall 2020 offering of Portland State University's CS 430/530 Internet, Web, and Cloud Systems course with 60 students.  The first half of the 10-week course covers key concepts in networking, operating systems, web development, and databases before transitioning to their use in cloud computing environments. At the beginning of the 6th week, a lecture on Google Cloud Identity and Access Management is given to students and the Least Privilege CTF levels were assigned. Students were given a due date for the exercises at the end of the 6th week, allowing them about a week to finish the levels.
