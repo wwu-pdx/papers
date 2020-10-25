@@ -1,29 +1,67 @@
-\noindent Advantages bestowed by cloud technologies, such as efficiency, agility, scalability and cost savings, are crucial for business success in today’s market. According to the 2020 Flexera State of the Cloud Report \cite{Flexera2020}, enterprises are running 48\% of their workloads and storing 45\% of their data in public clouds and planning to increase workload and data-related cloud utilization by 9\% and 8\% respectively over the next 12 months. 
+\noindent Due to the agility, scalability, and potential cost savings that
+cloud computing offers, businesses are in the process of shifting their workloads
+to public cloud providers. According to a recent report~\cite{Flexera2020}, enterprises are running close to half of of their workloads and storing close to half of their data in public clouds with most planning to increase their usage of cloud infrastructure in the future.
+% Clouds allow organizations to reduce startup costs and maintenance tasks in infrastructure (hardware and network) layers through virtualization. However, integration, both between cloud services and legacy systems and between various services from different cloud resources and platforms, is quite complex \cite{Baron2019}. 
+% The findings in the same Flexera report \cite{Flexera2020} indicate that 93\% of enterprises are embracing multi-cloud solutions (involving multiple public and/or private clouds), among which 87\% are taking a hybrid approach. Services from different platforms that are not always compatible with each other can pose data interoperability and ownership issues. The rapid adoption of newer technologies such as containers and serverless frameworks also contributes to cloud complexity\cite{Sharrm}. As a result, other than cloud computing itself, IAM becomes more abstruse in the cloud compared to it in legacy IT environments. The requirements to understand and configure effective access for different applications, services and platforms exacerbate the problem. 
+Unfortunately, with cloud computing comes a level of complexity that is far beyond what
+typical organizations are accustomed to handling with their current IT environments.
+Complicated fine-grained permissions and role-based access control applied to both legacy 
+virtual machines and networks as well as to modern container-based and serverless platforms has 
+made the practice of security in the cloud more abstruse~\cite{Sharrm}, raising significant
+security and privacy concerns~\cite{Takabi2010}.
 
-Clouds allow organizations to reduce startup costs and maintenance tasks in infrastructure (hardware and network) layers through virtualization. However, integration, both between cloud services and legacy systems and between various services from different cloud resources and platforms, is quite complex \cite{Baron2019}. 
-The findings in the same Flexera report \cite{Flexera2020} indicate that 93\% of enterprises are embracing multi-cloud solutions (involving multiple public and/or private clouds), among which 87\% are taking a hybrid approach. Services from different platforms that are not always compatible with each other can pose data interoperability and ownership issues. The rapid adoption of newer technologies such as containers and serverless frameworks also contributes to cloud complexity\cite{Sharrm}. As a result, other than cloud computing itself, IAM becomes more abstruse in the cloud compared to it in legacy IT environments. The requirements to understand and configure effective access for different applications, services and platforms exacerbate the problem. 
+As a result, studies~\cite{Ermetic2020,IBMSecurity2020} have revealed that nearly 80\% of companies have experienced at least one cloud data breach and that one of the top threats
+comes from improper Identity and Access Management (IAM) configurations (61\%).
+Cases of actual breaches stemming from misconfigured or over-provisioned IAM
+policies are common.
+In the Capital One breach in July 2019, an attacker gained access to an EC2 instance with
+overprovisioned IAM privileges in order to access sensitive information stored in a multitude
+of AWS S3 storage buckets~\cite{Parimi2019}. 
+In the AutoClerk breach, an Elastic search database hosted in AWS was left open, leaking
+the personal details of hotel guests, US government and military personnel~\cite{Fawkes2020}.
+Finally, in August 2020, two insiders at Twitter abused their overprovisioned privileges to
+user data to collect and exfiltrate the personal information of high value users for the 
+government of Saudi Arabia \cite{Newman2019}.
 
-Complicated controls and rushed technology programs, along with the shared responsibilities in cloud architecture, raise various security and privacy concerns \cite{Takabi2010}. A study \cite{Ermetic2020} commissioned by Ermetic, IDC revealed that nearly 80\% of companies experienced at least one cloud data breach during 2019 and the first half of 2020. And that the top three cloud security threats are misconfiguration of production environments (67\%), lack of visibility into access in production environments (64\%) and improper IAM and permission configurations (61\%). According to IBM's Cost of Data Breach Report 2020 \cite{IBMSecurity2020}, misconfigurations were exploited in 19\% of malicious breaches with a cost of \$4.41 million . This number is 14\% higher than the average cost of data breach.
+It is essential in any environment to always practice the principle of least privilege (PoLP)~\cite{Saltzer1974}. The concept of PoLP developed on the Multics system is that users or processes should only have the minimum privileges which are needed to perform its intended 
+work.  In cloud deployments, properly minimizing access to resources is considered
+a best practice that is essential for mitigating security risks~\cite{Sanders2018}. 
+Unfortunately, it is a practice that many companies find difficult to prioritize.
 
-A rash of data breaches are stemming from misconfigured or over-provisioned IAM when applying cloud services.
-In the cloud breach case of Capital One during July 2019, an attacker gained identity of the EC2 instance that has privileges to access sensitive information stored in AWS S3 \cite{Parimi2019}. 
-Another case was discovered from AutoClerk's unsecured Elastic search database hosted in AWS during September 2019. A surprising victim of this leak was the US government, military, and Department of Homeland Security (DHS). \cite{Fawkes2020}
-In a more recent case in August 2020, Two Twitter insiders abused their excessive internal privileges to collect information of high valued users for the government of Saudi Arabia \cite{Newman2019}.
+% MOVE TO SECTION 2
+%IAM can provide an adequate level of protection for all resources and data through rules and policies which are enforced on users via various techniques such as enforcing login password, assigning privileges to the users and provisioning user accounts \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
+%IAM ensures authentication, which validating the identity of users or systems. For example, authentication between services involves in verifying the access request to the information which served by another service \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
+%After authentication succeeds, authorization process will determine the privileges grant to legitimate users and enforce the security policies.
 
-Providers and users have to carefully balance between over privilege and under privileged access \cite{Sanders2018}. Properly managing identity access and following best practices are essential of mitigating the security risk. 
-In cloud computing, 
+Specifically, cloud systems are now so complex that developers are reluctant to modify security
+settings once ``it works''. As a consequence, any security errors that exist at deployment are
+rarely fixed.  A report on DevOps security has found that only 4\% of security issues found in 
+production are dealt with after development~\cite{Foremski}. Compounding this problem is the
+fact that developers often have limited experience with PoLP and are often introduced to cloud 
+services using guides and walkthroughs that de-emphasize good security practices in favor of 
+fast and  frictionless adoption of the service.  In one such case, documentation suggests that 
+the developer assign the ``Owner'' role to an account which gives the maximum permissions
+possible, when in fact, recent changes to the platform have made the need for the role
+unnecessary\cite{GoogleVis}.  If adveraries are then able to compromise the service,
+they are given complete access to all of project's cloud resources.
 
-IAM ensures authentication, which validating the identity of users or systems. For example, authentication between services involves in verifying the access request to the information which served by another service \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
-After authentication succeeds, authorization process will determine the privileges grant to legitimate users and enforce the security policies.
+%  is unnecessary for the 
+% An interesting case study is that cloud service provider sometimes suggests using Owner role that granted with maximum permission in their documentation (Quickstart: Setup the Vision API) . Based on the developer behavior we know, this could generate a potential attacking surface in the future.
+% Developers need guidance or training for secure coding, however, nearly 70\% of developers expressed that they get little help in GitLab's 2019 Global Developer Report  \cite{Gitlab2019}.
 
+While applying the principle of least privilege is critical to cloud security, there are
+few exercises that allow developers to practice it.  Many cloud-based ``capture-the-flag''
+exercises that are available online allow one to instead practice identifying
+vulnerabilities in cloud deployments and then exploiting them to achieve a goal. 
+Such offensive-minded CTFs such as Flaws~\cite{flaws,flaws2}, Cloud Goat~\cite{cloudgoat},
+and Serverless Goat~\cite{serverlessgoat} are available for Amazon Web Services while Thunder CTF~\cite{thunder-ctf} provides similar functionality for Google Cloud Platform.
+Unfortunately, while the exercises show us what happens when permissions are over-provisioned,
+they do not afford opportunites for us to practice reducing them. To address this, this
+paper describes the design, implementation, and evaluation of a Least Privilege CTF, a set of CTF exercises for helping one practice preventing security issues in cloud deployments
+via levels in which players apply least privileges onto deployments running on Google Cloud 
+Platform (GCP).
+ 
+% based exercises \cite{thunder-ctf} \cite{QWIKLABS}.  However, we find that none of them is destined for the purpose of   training developers on how to implement PoLP in cloud environment. 
 
-The best practice regarding IAM policies is to follow the principle of least privilege(PoLP). Jerome Saltzer is accredited for the original formulation in  his paper of  Protection and the control of information sharing in multics in 1974 \cite{Saltzer1974}. The concept of PoLP is that users or processes should only have the bare minimum privileges which are indispensable to perform its intended work.
-
-Even if PoLP is recommended by most cloud providers for security reason, many companies find it difficult to prioritize or practice in development. 
-As mentioned earlier, cloud systems are now so complex that developers are reluctant to modify the settings once "it works". As a consequence, the security gaps created by layers or new technologies will rarely or never be patched. A report on DevOps security has found that only 4\% of issues found in production are dealt with after development \cite{Foremski}. 
-An interesting case study is that cloud service provider sometimes suggests using Owner role that granted with maximum permission in their documentation (Quickstart: Setup the Vision API) \cite{GoogleVis}. Based on the developer behavior we know, this could generate a potential attacking surface in the future.
-Developers need guidance or training for secure coding, however, nearly 70\% of developers expressed that they get little help in GitLab's 2019 Global Developer Report  \cite{Gitlab2019}.
-
-The principle of least privilege is essential to cloud security. There are many cloud CTF exercises available online covering a wide variety of vulnerabilities. Most of them are AWS (Amazon Web Services) based \cite{flaws} \cite{flaws2} \cite{cloudgoat} \cite{serverlessgoat}, only two of them contain  GCP (Google Cloud Platform) based exercises \cite{thunder-ctf} \cite{QWIKLABS}.  However, none of them is destined for the purpose of training developers on how to implement PoLP in cloud environment. To address this, we create Least Privilege CTF, a set of CTF exercises for helping practice and implement PoLP on Google Cloud Platform.
-
-Section~\ref{sec:gcpiam} furnishes the definition of identity and access control in Google Cloud. Section~\ref{sec:ctf} describes the comprehensive design of Least Privilege CTF and its levels. Section~\ref{sec:eval} exhibits the results of an initial deployment in an advanced elective course in our program. Lastly, Section~\ref{sec:related} presents related work and Section~\ref{sec:concl} concludes.
+Section 2 provides a tutorial on the basics of Identity and Access Management control on
+GCP. Given this, Section 3 describes the comprehensive design of the Least Privilege CTF and its levels. Section 4 describes the evaluation of an initial deployment in an advanced elective course in our program.  Finally, Section 5 presents related work and Section 6 concludes.
