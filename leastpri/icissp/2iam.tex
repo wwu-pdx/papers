@@ -1,56 +1,105 @@
-\noindent Identity and Access Management provides protection for resources and data through rules and policies which are enforced on users via various techniques. Common ones are enforcing login passwords, assigning privileges to the users and provisioning user accounts \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
-Similarly, in Google Cloud, IAM grants granular access to specific resources and helps prevent access to other resources \cite{Googlecloudiam}.
+On public cloud platforms, an Identity and Access Management (IAM) service is used to implement
+authentication and authorization rules and policies for governing access to cloud resources.
+IAM allows one to perform access control at a highly granular level with regard to who is allowed access and to what resource the access is allowed.
+Whenn configured properly, IAM can provide an adequate level of protection for all resources and data through permissions and policies that are enforced on users and applications~\cite{AlmullaSameeraAbdulrahmanandYeun2010}.
+IAM is first used to support the authentication of the identity of users or systems. For example, authentication between services involves often involves verifying an authentication token
+passed from one endpoint to the other.  After authentication succeeds, IAM supports an
+authorization process that determines the privileges afforded to a user or system and enforces
+the security policies to ensure it.
 
-Identities are essentially authenticated members. A member (Figure~\ref{fig:mem}) can be a Google Account for end users (userid@gmail.com), a service account for apps and virtual machines (12345678@cloudservices.gserviceaccount.com), a Google group (groupname@googlegroups.com), or a G Suite or cloud identity domain that can access a resource (alias@example.com). The identities of the first three member types are email addresses. The identity associated with G Suite or cloud identity domain is usually a domain name.
+\subsection{Basics}
+In its instantiation on
+Google Cloud Platform, there are three main components for implementing IAM: members, roles, and policies~\cite{Googlecloudiam}.  Members
+provide the ``Identity'' (e.g. authentication) component while roles and policies provide the ``Access Management'' (e.g.
+authorization) component.
+
 \begin{figure}[h]
   \centering
-  \includegraphics[width=\linewidth]{pic/mem}
+  \includegraphics[width=\linewidth]{mem}
   \caption {Types of Members in GCP}
   \label{fig:mem}
 \end{figure}
 
-An authorization process that grants access of resources to members can be achieved through role and policy. A role is a collection of permissions determining what operations are allowed on a resource (Figure~\ref{fig:role}). Instead of assigning permissions directly to end users, in Google Cloud, permissions are grouped into roles and then granted to authenticated members to access resources. Granting a role to a member actually grants all the permissions of that role.
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=\linewidth]{pic/role}
-  \caption {GCP Predefined Role}
-  \label{fig:role}
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=\linewidth]{role}
+    \caption {GCP Predefined Role}
+    \label{fig:role}
 \end{figure}
-A policy binds who (member) has what access (role) for which resource \cite{Googlecloudiam}. Some examples of resources are organizations, folders, projects, Compute Engine instances, and Cloud Storage buckets. The binding between members and roles is a many-to-many relationship.
-Primitive, predefined, and custom roles are three types of roles supported in Google Cloud IAM \cite{googlecloudrole}. Primitive roles (renamed as Basic roles later) comprises Owner, Editor and Viewer roles, which exist prior to the introduction of IAM in GCP. For example, the account one uses to create a project will be automatically attach with Owner role. Predefined roles are finer-grained roles for a particular service or resource. Privileges can also be limited further by creating a custom role and attach permissions across services based on user selection. Unfortunately, not all permissions can be linked to Custom roles such as Datastore related permissions. 
 
-The role based model of cloud IAM simplifies the implementation of PoLP. To illustrate this, we can take the access control of Cloud Storage as an example. In Cloud Storage, everything that must be contained in a bucket. Buckets are the basic containers that hold objects such as files, images, etc. Suppose in a project, a set of users need access to view files and file content in a public bucket. For beginners, an easy solution is to create a Google group for the users and grant Storage Admin role (roles/storage.admin) to it. However, looking through Table~\ref{table:sto-role}, which demonstrates all predefined Cloud Storage roles and corresponding permissions, it is obvious that Storage Object Viewer role would be sufficient for users to perform the same task. 
 \begin{table}[t]
-    \caption{IAM roles for Cloud Storage} \centering
-    \begin{tabular}{|p{4.2cm}|p{4cm}|}
-    \hline
-    Role & Permissions\\
-    \hline
-    \hline
-    Storage Object Creator\par(roles/storage.objectCreator) &  resourcemanager.projects.get \par resourcemanager.projects.list \par storage.objects.create \\ %% $\pm$ \\
-    \hline
-    Storage Object Viewer\par(roles/storage.objectViewer) & resourcemanager.projects.get\par resourcemanager.projects.list\par storage.objects.get\par storage.objects.list \\ %% $\pm$ \\
-    \hline
-    Storage Object Admin\par(roles/storage.objectAdmin) & resourcemanager.projects.get \par resourcemanager.projects.list\par storage.objects.*\\ %% $\pm$ \\
-    \hline
-    Storage HMAC Key Admin\par(roles/storage.hmacKeyAdmin) &storage.hmacKeys.*\\
-    \hline
-     Storage Admin\par(roles/storage.admin) &firebase.projects.get\par resourcemanager.projects.get\par resourcemanager.projects.list\par storage.buckets.*\par storage.objects.*\\
-    \hline
-    \end{tabular}
-    \label{table:sto-role}
+  \begin{center}
+  \begin{tabular}{|p{4cm}|p{4cm}|}
+  \hline
+  Role & Permissions\\
+  \hline
+  \hline
+  Storage Object Creator\par(roles/storage.objectCreator) &  resourcemanager.projects.get  \par resourcemanager.projects.list \par storage.objects.create \\ %% $\pm$ \\
+  \hline
+  Storage Object Viewer\par(roles/storage.objectViewer) & resourcemanager.projects.get\par resourcemanager.projects.list\par storage.objects.get\par storage.objects.list \\ %% $\pm$ \\
+  \hline
+  Storage Object Admin\par(roles/storage.objectAdmin) & resourcemanager.projects.get \par resourcemanager.projects.list\par storage.objects.*\\ %% $\pm$ \\
+  \hline
+  Storage HMAC Key Admin\par(roles/storage.hmacKeyAdmin) &storage.hmacKeys.*\\
+  \hline
+   Storage Admin\par(roles/storage.admin) &firebase.projects.get\par resourcemanager.projects.get\par resourcemanager.projects.list\par storage.buckets.*\par storage.objects.*\\
+  \hline
+  \end{tabular}
+  \caption{IAM roles for Cloud Storage}
+  \vspace{-0.20in}
+  \label{table:sto-role}
+  \end{center}
 \end{table}
-Therefore, Storage Object Viewer role is a better option (Figure~\ref{fig:sto-pre}), but still it is over-privileged. 
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=\linewidth]{pic/sto-pre}
-  \caption {Policy - Predefined Role}
-   \label{fig:sto-pre}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{sto-pre}
+\caption {Policy - Predefined Role}
+ \label{fig:sto-pre}
 \end{figure}
-Google documentation explains that storage.objects.list and storage.objects.get are actual permissions that allow a member to list files and view file content. To follow PoLP and optimize the solution, we can create a custom role with the two least privileges attached and bind the custom role to the Google group(Figure~\ref{fig:sto-cus}).
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=\linewidth]{pic/sto-cus}
-  \caption {Policy - Custom Role}
-   \label{fig:sto-cus}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\linewidth]{sto-cus}
+\caption {Policy - Custom Role}
+ \label{fig:sto-cus}
 \end{figure}
+
+\begin{itemize}
+\item {\em Members} represent an authenticated identity.  As Figure~\fig{fig:mem} shows, such identities can be a Google user account
+({\tt userid@gmail.com}), a service account created for applications ({\tt 1234...@....gserviceaccount.com}), a Google group ({\tt groupname@googlegroups.com}), or an identity domain ({\tt ...@example.com}). While the identities of the first three member types are email 
+addresses, an identity domain is typically a domain name for an organization.
+
+\item {\em Roles} are collections of permissions where each permission specifies access to and operations allowed on a particular resource.
+Some examples of resources are projects, Compute Engine instances, and Cloud Storage buckets.  Due to the sheer number of 
+resources a cloud project can have access to, there are thousands of permissions that can be specified.  While one could assign individual
+permissions to each member, doing so is quite cumbersome.  As a result, permissions are instead grouped and assigned to roles which are
+then attached to members.  There are three types of roles supported in Google Cloud IAM \cite{googlecloudrole}: primitive, predefined and custom.
+Primitive (also known as Basic) roles are coarse, project-level roles that are managed by GCP and include project ``Owner'', ``Editor'', and 
+``Viewer'' roles.  Such roles existed prior to the current version of IAM in GCP that implemented finer-grained permissions and should not
+be prevalently used to do the inability to reduce privileges in them appropriately.  Pre-defined roles are also maintained by GCP and
+consist of collections of commonly grouped permissions for a specific service.  Pre-defined roles specify a permissions at a finer granularity 
+than primitive roles and are made available to projects for convenience.  Figure ~\ref{fig:role} shows examples of several pre-defined roles that cover a variety of cloud platform resources and services.   Finally, users can create custom roles and specify the exact set of permissions
+allowed.  This allows one to apply the PoLP at its finest granularity, but is the most complicated to set up, requiring the platform user to understand what each individual permission allows.
+%%Custom roles provide user-specified list of permissions across services. Unfortunately, not all permissions can be linked to Custom roles such as Datastore related permissions.
+
+\item {\em Policies} are collections of bindings that bind members to roles and thus give the members access to the resources specified in
+each role.  Multiple members can be bound to a particular role~\cite{Googlecloudiam}. 
+\end{itemize}
+
+\subsection{An example applying least-privileges}
+Consider a scenario in which two users need to list all of the objects in a storage bucket and view all of their contents.  To
+begin with, we can define a member that is a Google group in which both users are added.  Then, for a policy, we can attach
+a primitive role of project ``Viewer'' that will enable the users to view all parts of the project (not just its buckets).
+The primitive role ``Viewer'', while having a limited set of permissions compared to the
+primitive role ``Owner'', still has excessive permissions associated with it.
+To address this, we might instead replace the policy with one that
+attaches a pre-defined role of ``Storage Admin'' ({\tt roles/storage.admin}) with its associated permissions shown in Table~\ref{table:sto-role}
+that would allow the operations ({\tt storage.objects.*}).  However, this also has excessive 
+permissions. In looking at other pre-defined roles and
+their associated permissions with Cloud Storage, we notice that ``Storage Object Viewer'' has sufficient permissions
+to perform the same task ({\tt storage.objects.list} to list the object and {\tt storage.objects.get} to retrieve the object's
+contents). Thus, binding ``Storage Object Viewer''
+to the Google group would further reduce privileges.  In looking at the ``Storage Object Viewer'' pre-defined role, however, we notice
+that it provides two additional permissions that are not required by the two users.  To apply the PoLP at its finest granularity,
+we can instead create a custom role and attach only the two permissions required.
