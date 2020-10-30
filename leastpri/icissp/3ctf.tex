@@ -31,7 +31,7 @@ Players may spend a little bit more time on the levels regarding Cloud Vision se
 In the design of Least Privilege CTF, all functions are expected to access level resources only with their default identities, the service accounts created and attached during deployment. The roles bind with these service accounts can be updated after deployment in Google Cloud Console. 
 A check function validates whether the binding role(s) in access function matche(s) the correct answer, so a role with permissions to list and get roles or IAM policy is always required. The score board function is using similar technique to validate answers and calculate scores, and repeat this for all levels. The roles bind with access functions are more complicated and vary based on specific levels. In general, access functions begin with a role of excessive permissions to perform certain actions described in level instruction. The winning condition is to apply PoLP and grant minimum privileges that are just enough to perform the same action. The process of picking and specifying more restrictive roles has been exemplified in Section~\ref{sec:gcpiam}.
 
-\subsubsection{Ease of gameplay}
+\subsubsection{Gameplay}
 \begin{figure}[!h]
   \centering
   \includegraphics[width=0.5\textwidth]{pic/access}
@@ -75,7 +75,7 @@ and get immediate feedback on solutions.  Figure~\ref{fig:score} shows
 the scoreboard interface.  To make it easier for players to focus on the specific goal of each level, the type of role and the service that a level
 targets are included in the level name and joined by a dash (first column of Figure~\ref{fig:score}). 
 
-\subsubsection{Deployment ease}
+\subsubsection{Deployment}
 Due to the fact that it is attempting to teach security issues in the cloud,
 the Least Privilege CTF assumes players have access to a cloud project that they can use to run
 the exercise.  Most public cloud providers support a free-tier that allows one to utilize services without cost and the implementation
