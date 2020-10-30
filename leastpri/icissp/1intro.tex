@@ -1,38 +1,33 @@
-\noindent Due to the agility, scalability, and potential cost savings that
+Due to the agility, scalability, and potential cost savings that
 cloud computing offers, businesses are in the process of shifting their workloads
 to public cloud providers. According to a recent report~\cite{Flexera2020}, enterprises are running close to half of of their workloads and storing close to half of their data in public clouds with most planning to increase their usage of cloud infrastructure in the future.
 % Clouds allow organizations to reduce startup costs and maintenance tasks in infrastructure (hardware and network) layers through virtualization. However, integration, both between cloud services and legacy systems and between various services from different cloud resources and platforms, is quite complex \cite{Baron2019}. 
 % The findings in the same Flexera report \cite{Flexera2020} indicate that 93\% of enterprises are embracing multi-cloud solutions (involving multiple public and/or private clouds), among which 87\% are taking a hybrid approach. Services from different platforms that are not always compatible with each other can pose data interoperability and ownership issues. The rapid adoption of newer technologies such as containers and serverless frameworks also contributes to cloud complexity\cite{Sharrm}. As a result, other than cloud computing itself, IAM becomes more abstruse in the cloud compared to it in legacy IT environments. The requirements to understand and configure effective access for different applications, services and platforms exacerbate the problem. 
 Unfortunately, with cloud computing comes a level of complexity that is far beyond what
-typical organizations are accustomed to handling with their current IT environments.
+typical organizations are accustomed to handling in their current IT environments.
 Complicated fine-grained permissions and role-based access control applied to both legacy 
 virtual machines and networks as well as to modern container-based and serverless platforms has 
 made the practice of security in the cloud more abstruse~\cite{Sharrm}, raising significant
 security and privacy concerns~\cite{Takabi2010}.
 
-As a result, studies~\cite{Ermetic2020,IBMSecurity2020} have revealed that nearly 80\% of companies have experienced at least one cloud data breach and that one of the top threats
-comes from improper Identity and Access Management (IAM) configurations (61\%).
+As a result, studies~\cite{Ermetic2020,IBMSecurity2020} have revealed that nearly 80\% of companies have experienced at least one cloud data breach with one of the top threats
+coming from improper Identity and Access Management (IAM) configurations (61\%).
 Cases of actual breaches stemming from misconfigured or over-provisioned IAM
 policies are common.
 In the Capital One breach in July 2019, an attacker gained access to an EC2 instance with
-overprovisioned IAM privileges in order to access sensitive information stored in a multitude
+overprovisioned IAM permissions in order to access sensitive information stored in a multitude
 of AWS S3 storage buckets~\cite{Parimi2019}. 
 In the AutoClerk breach, an Elastic search database hosted in AWS was left open, leaking
-the personal details of hotel guests, US government and military personnel~\cite{Fawkes2020}.
-Finally, in August 2020, two insiders at Twitter abused their overprovisioned privileges to
-user data to collect and exfiltrate the personal information of high value users for the 
+the personal details of hotel guests as well as US government and military
+personnel~\cite{Fawkes2020}.
+Finally, in August 2020, two insiders at Twitter abused their overprovisioned permissions to
+collect and exfiltrate the personal information of high value users for the 
 government of Saudi Arabia \cite{Newman2019}.
 
 It is essential in any environment to always practice the principle of least privilege (PoLP)~\cite{Saltzer1974}. The concept of PoLP developed on the Multics system is that users or processes should only have the minimum privileges which are needed to perform its intended 
 work.  In cloud deployments, properly minimizing access to resources is considered
 a best practice that is essential for mitigating security risks~\cite{Sanders2018}. 
 Unfortunately, it is a practice that many companies find difficult to prioritize.
-
-% MOVE TO SECTION 2
-%IAM can provide an adequate level of protection for all resources and data through rules and policies which are enforced on users via various techniques such as enforcing login password, assigning privileges to the users and provisioning user accounts \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
-%IAM ensures authentication, which validating the identity of users or systems. For example, authentication between services involves in verifying the access request to the information which served by another service \cite{AlmullaSameeraAbdulrahmanandYeun2010}.
-%After authentication succeeds, authorization process will determine the privileges grant to legitimate users and enforce the security policies.
-
 Specifically, cloud systems are now so complex that developers are reluctant to modify security
 settings once ``it works''. As a consequence, any security errors that exist at deployment are
 rarely fixed.  A report on DevOps security has found that only 4\% of security issues found in 

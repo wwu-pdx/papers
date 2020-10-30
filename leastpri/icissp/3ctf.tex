@@ -88,14 +88,15 @@ of the CTF supports the ability for players to easily deploy and play the CTF at
 \end{figure}
 
 \begin{itemize}
-  \item {\em Serverless design}: To reduce costs, the CTF is implemented using Cloud Functions, a serverless function platform.  For the CTF, all access and check functions are implemented as Cloud Functions.  There are several advantages in this approach.  First, Cloud Functions require no server management which
+  \item {\em Serverless design}: To reduce costs, the CTF is predominantly implemented using Cloud Functions, a serverless function platform.  For the CTF, all access and check functions are implemented as Cloud Functions.  There are several advantages in this approach.  First, Cloud Functions require no server management which
   simplifies both development and deployment as one does not have to manage the operational server infrastructure being used.  Second, serverless platforms
   scale the amount of resources deployed based on usage and projects are charged only per function invocation.  As a result, when the CTF is not actively being used, the infrastructure used to handle its functions are brought down and
   the project incurs no charges.  The infrastructure for each function is then instantly spun up upon the player's next access to it.
   With a free tier of 2 million invocations per month for the Cloud Function service~\cite{https://cloud.google.com/free}, this ensures that the exercise
   is free to use.  Third, the use of individual serverless functions for the CTF allows one to easily implement levels since each function can be assigned
   a unique service account with a primitive, pre-defined, or custom role attached to it, naturally aligning it with the conceptual content the CTF is attempting to teach.  The separation also allows levels to be independently developed and provides isolation between them, making it easier to develop additional levels.
-
+  Figure~\ref{fig:cost} shows the cost breakdown of running the CTF.  As the figure shows, the CTF consumes a minimal amount of resources with the a single
+  Compute Engine VM (for the privileges related to Compute Engine roles), a storage bucket, and the aforementioned Cloud Functions being utilized.
   \item {\em Single-command deployment}: Several cloud-based CTFs require individual levels to be brought up and down with explicit commands.  For example, in both Cloud Goat and Thunder CTF, players create and destroy levels individually in order to play them.  In contrast, the Least Privilege CTF deploys its entire set of levels with a single command, allowing players to avoid the mechanics of running the CTF as much as possible.  This is done via the platform's Cloud Deployment
   Manager service, an infrastructure-as-code solution that allows one to programmatically instantiate cloud resources in a consistent and repeatable manner.  Using
   this service, all service accounts, roles, policies, access functions, check functions, and scoreboard functions for the CTF are instantiated all at once using
@@ -105,20 +106,29 @@ of the CTF supports the ability for players to easily deploy and play the CTF at
   functions are deployed with to support its integration into courses. 
 \end{itemize}
 
-\subsubsection{Extensibility}
-Least privilege CTF is developed based on Thunder CTF, a scaffolded, scenario-based CTF that helps students learn about and practice cloud security skills on GCP. Each Thunder CTF level includes a yaml development configuration, a python deployment script and an HTML content for hints \cite{Springer}. The modular design and specific structure reduces the process of adding new levels to simply filling in a template. Least privilege CTF inherits the modular structure from Thunder CTF with modification. Rather than deploy each level individually, Least Privileges CTF deploys all required resources specified in the yaml file at one time in parallel with Google Cloud Deployment Manager, which takes about 4.5 mins for 11 levels.
-
-\subsubsection{UI and Cloud Functions}
-The type of function to create level instructions and hints in Least Privilege CTF is HTTP function. HTTP functions are invoked by standard HTTP requests and supports common methods like GET, PUT, POST, DELETE and OPTIONS \cite{httpfunc}. A typical procedure in our design framework is that when a function is triggered by events, it waits for responses either returned from a Cloud service or submitted in front-end using POST or GET method. Thanks to the TLS certificates that automatically provisioned in Cloud Functions service, all HTTP functions can be invoked with a secure connection. 
-
-In order to call a function and pass parameters, an URL known as HTTP-Triggered-Endpoint is obtained after each function deployment. Figure~\ref{fig:endpoints} shows the function endpoints printed in Cloud Console shell when deployment manager completes the operation and creates initial levels. In Least Privilege CTF, functions are written in python and interact with other cloud services through APIs. The returned results of a function will be rendered into HTML through Jinja and appear in the form of a web page. Players can access the page in web browser via related function endpoint.
-
 \begin{figure*}[h]
   \centering
   \includegraphics[width=0.7\textwidth]{pic/endpoints}
   \caption {Endpoints}
    \label{fig:endpoints}
 \end{figure*}
+\subsubsection{Extensibility}
+The Least Privilege CTF is built using the Thunder CTF framework, a framework used to implement a scaffolded, scenario-based CTF for helping
+students learn about and practice cloud security skills on GCP.
+Each Thunder CTF level includes a YAML development configuration, a Python level deployment script and an HTML template for generating the hints for
+each level~\cite{Springer}. The modular design and structure streamlines the process of adding new levels.
+
+The Least Privilege CTF inherits the modular structure from Thunder CTF with some modifications.  In the Least Privilege CTF, each level consists of a pair of Cloud Functions triggered by HTTP requests.  Each level can be independently designed and deployed, allowing levels to be inserted and removed without impacting any of the other levels.
+Level designers first create the access function which serves as the landing page of the level.  The access function is written in Python and uses Jinja
+to construct the landing page containing the level's instructions and hints.    The function also contains code that interacts with other cloud services through APIs.
+To do so successfully, the service account associated with the access function is given an initial (over-provisioned) role.  Players can access the access
+function in a web browser to see the level instructions and its functionality.
+The designer then creates the check function that examines the privileges associated with the service account attached to the access
+function.  This is the main exercise.  Players must determine whether the permissions associated with the service account are set in a least privilege manner.
+If not, then they are tasked with going to the IAM settings for the project and reducing its privileges.  The check function, also written as a Cloud Function
+with an HTTP trigger, outputs a web page that indicates whether the privileges have been reduced appropriately and the level has been solved.  Figure~\ref{fig:endpoints}
+shows an example listing of the endpoints that are deployed in the CTF.
+
 %%\begin{figure*}[t]
 %%  \centering
  %% \begin{tabular}{c}
