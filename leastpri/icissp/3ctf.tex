@@ -80,12 +80,51 @@ Due to the fact that it is attempting to teach security issues in the cloud,
 the Least Privilege CTF assumes players have access to a cloud project that they can use to run
 the exercise.  Most public cloud providers support a free-tier that allows one to utilize services without cost and the implementation
 of the CTF supports the ability for players to easily deploy and play the CTF at low cost.   Specifically, the CTF features:
-\begin{figure}[!h]
-  \centering
-  \includegraphics[width=\linewidth]{pic/cost}
-  \caption {Billing - Monthly Cost}
-  \label{fig:cost}
-\end{figure}
+%%\begin{figure}[!h]
+%%  \centering
+ %% \includegraphics[width=\linewidth]{pic/cost}
+ %% \caption {Billing - Monthly Cost}
+ %% \label{fig:cost}
+%%\end{figure}
+\begin{table*}[t]
+\centering
+ \caption{Billing - Monthly Cost (8/1/20-8/31/20)}
+    \label{table:cost} 
+    %%\begin{tabular}{|p{3cm}|p{6cm}|p{1cm}|p{1.5cm}|p{1cm}|}
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Service & SKU & Usage Amount & Usage Unit & Cost(\$) \\
+    \hline
+    \hline
+    Compute Engine &Micro Instance with burstable CPU running in Americas& 83.998 & hour & 0.60\\ %% $\pm$ \\
+    \hline
+    Compute Engine &External IP Charge on a Standard VM& 83.998 & hour & 0.32\\ %% $\pm$ \\
+    \hline
+    Compute Engine &Network Internet Egress from Americas to China& 0.003 & gibibyte & 0.00\\ %% $\pm$ \\
+    \hline
+     Compute Engine &Promotion&  &  & -0.92\\ %% $\pm$ \\
+    \hline
+     Cloud Storage &Standard Storage US Multi-region& 0.268 & gibibyte month & 0.01\\ %% $\pm$ \\
+    \hline
+     Cloud Storage &Multi-Region Standard Class A Operations& 6 & count & 0.00\\ %% $\pm$ \\
+    \hline
+     Cloud Storage  &Promotion&  &  & -0.01\\ %% $\pm$ \\
+    \hline
+     Cloud Functions &CPU Time& 0.52 & GHz-second & 0.00\\ %% $\pm$ \\
+    \hline
+    \hline
+      & & & Total & 0.00\\ %% $\pm$ \\
+    \hline
+    \end{tabular}
+\end{table*}
+
+
+
+
+
+
+
+
 
 \begin{itemize}
   \item {\em Serverless design}: To reduce costs, the CTF is predominantly implemented using Cloud Functions, a serverless function platform.  For the CTF, all access and check functions are implemented as Cloud Functions.  There are several advantages in this approach.  First, Cloud Functions require no server management which
@@ -95,7 +134,7 @@ of the CTF supports the ability for players to easily deploy and play the CTF at
   With a free tier of 2 million invocations per month for the Cloud Function service~\cite{https://cloud.google.com/free}, this ensures that the exercise
   is free to use.  Third, the use of individual serverless functions for the CTF allows one to easily implement levels since each function can be assigned
   a unique service account with a primitive, pre-defined, or custom role attached to it, naturally aligning it with the conceptual content the CTF is attempting to teach.  The separation also allows levels to be independently developed and provides isolation between them, making it easier to develop additional levels.
-  Figure~\ref{fig:cost} shows the cost breakdown of running the CTF.  As the figure shows, the CTF consumes a minimal amount of resources with the a single
+  Figure~\ref{table:cost} shows the cost breakdown of running the CTF.  As the figure shows, the CTF consumes a minimal amount of resources with the a single
   Compute Engine VM (for the privileges related to Compute Engine roles), a storage bucket, and the aforementioned Cloud Functions being utilized.
   \item {\em Single-command deployment}: Several cloud-based CTFs require individual levels to be brought up and down with explicit commands.  For example, in both Cloud Goat and Thunder CTF, players create and destroy levels individually in order to play them.  In contrast, the Least Privilege CTF deploys its entire set of levels with a single command, allowing players to avoid the mechanics of running the CTF as much as possible.  This is done via the platform's Cloud Deployment
   Manager service, an infrastructure-as-code solution that allows one to programmatically instantiate cloud resources in a consistent and repeatable manner.  Using
