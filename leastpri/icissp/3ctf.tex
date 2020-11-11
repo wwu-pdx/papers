@@ -24,7 +24,6 @@ walkthroughs for convenience, but are often overprovisioned.  Players then progr
 to reduce the privileges from primitive roles.   Finally, players are then asked to create custom roles to generate an exact set of permissions that are
 required for a particular access pattern.
 Specifically, there are currently 11 levels in the Least Privilege CTF.  The levels are designed in a scaffolded style with incrementally increasing difficulties. 
--> project level primitive roles, 
 Players may spend a little bit more time on the levels regarding Cloud Vision service - a service that does not have a set of predefined roles or permissions associated in GCP, indicating that the authenticated service accounts will have default access to Cloud Vision API. In order to analyse images with Cloud Vision service, the players are required to upload images into a Bucket through the form in front-end page (access function). The analysed results will be inserted into Cloud Datastore and listed in the same page.  The roles or permissions to complete such tasks are actually in Cloud Storage and Datastore category. The correct answer of level CustomRole-Vision is a combination of predefined role and custom role. As mentioned in Section~\ref{sec:gcpiam}, GCP does not support Datastore permissions in Custom Role yet.
 
 
